@@ -1,0 +1,64 @@
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+// Font-Awesome
+@import "~font-awesome/scss/font-awesome";
+
+// iCheck
+@import "~icheck/skins/square/green.css";
+
+// Animate.css
+@import "~animate.css/animate.css";
+
+// MetisMenu
+@import "~metismenu/dist/metisMenu.css";
+
+// Bootstrap Datepicker
+@import "~bootstrap-datepicker/dist/css/bootstrap-datepicker3.css";
+
+// Select2
+@import "~select2/dist/css/select2.css";
+@import "inspinia/plugins/select2-bootstrap4.min.css";
+
+// Bootstrap Timepicker
+@import "~clockpicker/dist/bootstrap-clockpicker.min.css";
+
+// Toastr
+@import "~toastr/build/toastr.css";
+
+//Noty
+@import "~noty/src/noty.scss";
+@import "~noty/src/themes/mint.scss";
+@import "~noty/src/themes/bootstrap-v4.scss";
+
+// DataTables
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.css";
+@import "~datatables.net-buttons-bs4/css/buttons.bootstrap4.css";
+
+//Sheet
+@import "inspinia/plugins/sheet.css";
+
+
+// Style
+@import "inspinia/style";
+
+table.dataTable tbody tr.selected {
+    background-color: #f2fbff;
+}
+
+.dt-bootstrap4 .buttons-collection .caret {
+    display: none;
+}
+
+.dt-bootstrap4 .dt-button-collection {
+    left: auto !important;
+    min-width: 100px;
+}
+
+.select2 {
+    width: 100% !important;
+}
+
+.select2-dropdown {
+    z-index: 9999;
+}

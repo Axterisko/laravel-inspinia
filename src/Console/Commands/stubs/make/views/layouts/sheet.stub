@@ -1,0 +1,4 @@
+@extends('inspinia::layouts.sheet')
+@section('title','Sheet title')
+@section('actions','Sheet actions')
+@section('content','Sheet content')
