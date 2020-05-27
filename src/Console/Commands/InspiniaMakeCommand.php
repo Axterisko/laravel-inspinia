@@ -34,6 +34,7 @@ class InspiniaMakeCommand extends Command
         'errors/404.stub' => 'errors/404.blade.php',
         'errors/419.stub' => 'errors/419.blade.php',
         'layouts/app.stub' => 'layouts/app.blade.php',
+        'layouts/sheet.stub' => 'layouts/sheet.blade.php',
         'home.stub' => 'home.blade.php',
     ];
 
