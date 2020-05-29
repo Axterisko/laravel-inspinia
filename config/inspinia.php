@@ -1,5 +1,11 @@
 <?php
 
 return [
-    'skin' => ''
+    //md-skin | light-skin | skin-1
+    //mini-navbar fixed-sidebar fixed-nav fixed-nav-basic boxed-layout
+    'skin' => '',
+    //navbar-static-top | navbar-fixed-top
+    'navbar-skin' => 'navbar-static-top',
+    //fixed
+    'footer-skin' => 'fixed'
 ];

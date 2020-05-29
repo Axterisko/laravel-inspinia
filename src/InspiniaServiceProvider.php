@@ -19,11 +19,14 @@ class InspiniaServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/inspinia.php' => config_path('inspinia.php'),
         ], 'config');
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'axterisko');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'inspinia');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'inspinia');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
-
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/inspinia'),
+            __DIR__.'/../resources/lang' => resource_path('lang/vendor/inspinia'),
+        ], 'laravel-inspinia');
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -69,7 +72,8 @@ class InspiniaServiceProvider extends ServiceProvider
         // Publishing the configuration file.
         $this->publishes([
             __DIR__ . '/../config/inspinia.php' => config_path('inspinia.php'),
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/inspinia')
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/inspinia'),
+            __DIR__.'/../resources/lang' => resource_path('lang/vendor/inspinia'),
         ], 'laravel-inspinia');
 
         // Publishing the views.
