@@ -44,12 +44,6 @@
 // Your custom style to override base style
 @import "custom";
 
-#side-menu .nav .nav-header {
-    display: block;
-    width: 100%;
-    position: relative;
-}
-
 // Clear layout on print mode
 @media print {
     nav.navbar-static-side {

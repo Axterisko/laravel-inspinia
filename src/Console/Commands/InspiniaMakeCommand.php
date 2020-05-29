@@ -57,11 +57,13 @@ class InspiniaMakeCommand extends Command
      */
     public function handle()
     {
-        $this->info('Publish dependencies');
-        $this->call('vendor:publish', ['--tag' => 'laravel-noty']);
-        $this->call('vendor:publish', ['--tag' => 'datatables-buttons']);
-        $this->info('Execute make:auth');
-        $this->call('ui:auth', ['--force' => true, '--views' => $this->option('views')]);
+        if (!$this->option('views')) {
+            $this->info('Publish dependencies');
+            $this->call('vendor:publish', ['--tag' => 'laravel-noty']);
+            $this->call('vendor:publish', ['--tag' => 'datatables-buttons']);
+            $this->info('Execute make:auth');
+            $this->call('ui:auth', ['--force' => true, '--views' => $this->option('views')]);
+        }
         $this->info('Start Inspinia scaffolding');
         $this->info('Copying views...');
         $this->createDirectories();
@@ -71,12 +73,13 @@ class InspiniaMakeCommand extends Command
                 resource_path('views/' . $value)
             );
         }
-        $this->info('Copying assets...');
-        $this->xcopy(__DIR__ . '/../../../resources/js', resource_path('js'));
-        $this->xcopy(__DIR__ . '/../../../resources/sass', resource_path('sass'));
-        $this->info('Copying public...');
-        $this->xcopy(__DIR__ . '/../../../public', public_path());
         if (!$this->option('views')) {
+            $this->info('Copying assets...');
+            $this->xcopy(__DIR__ . '/../../../resources/js', resource_path('js'));
+            $this->xcopy(__DIR__ . '/../../../resources/sass', resource_path('sass'));
+            $this->info('Copying public...');
+            $this->xcopy(__DIR__ . '/../../../public', public_path());
+
             file_put_contents(
                 base_path('webpack.mix.js'),
                 file_get_contents(__DIR__ . '/stubs/make/webpack.mix.stub'),
