@@ -26,7 +26,6 @@
             </div>
         </li>
         @section('sidebar-menu')
-
             <li class="active">
                 <a href="/"><i class="fa fa-th-large"></i> <span class="nav-label">Home</span></a>
             </li>

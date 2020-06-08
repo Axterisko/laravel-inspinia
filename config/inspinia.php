@@ -7,5 +7,14 @@ return [
     //navbar-static-top | navbar-fixed-top
     'navbar-skin' => 'navbar-static-top',
     //fixed
-    'footer-skin' => 'fixed'
+    'footer-skin' => 'fixed',
+
+    'admin' => [
+        'username' => 'admin',
+        'email' => 'admin@example.it',
+    ],
+    'roles' => [],
+    'permissions' => [
+//        'permission' => ['role']
+    ],
 ];

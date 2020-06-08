@@ -17,7 +17,10 @@
         "laravel/ui": "^2.0",
         "rsmalc/laravel-noty": "^2.3",
         "mariuzzo/laravel-js-localization": "^1.6",
-        "yajra/laravel-datatables": "^1.5"
+        "yajra/laravel-datatables": "^1.5",
+        "spatie/laravel-menu": "^3.5",
+        "spatie/laravel-permission": "^3.13",
+        "davejamesmiller/laravel-breadcrumbs": "^5.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",

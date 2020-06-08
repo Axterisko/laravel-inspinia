@@ -17,15 +17,18 @@ class InspiniaServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/inspinia.php' => config_path('inspinia.php'),
-        ], 'config');
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'inspinia');
+            __DIR__.'/../config/inspinia.php' => config_path('inspinia.php'),
+        ], 'laravel-inspinia-config');
+
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'inspinia');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'inspinia');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
+
         $this->publishes([
+            __DIR__ . '/../config/inspinia.php' => config_path('inspinia.php'),
             __DIR__ . '/../resources/views' => resource_path('views/vendor/inspinia'),
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/inspinia'),
+            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/inspinia'),
         ], 'laravel-inspinia');
 
         // Publishing is only necessary when using the CLI.
@@ -73,23 +76,9 @@ class InspiniaServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/inspinia.php' => config_path('inspinia.php'),
             __DIR__ . '/../resources/views' => resource_path('views/vendor/inspinia'),
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/inspinia'),
+            __DIR__ . '/../resources/lang' => resource_path('lang/vendor/inspinia'),
         ], 'laravel-inspinia');
 
-        // Publishing the views.
-        /*$this->publishes([
-            __DIR__.'/../resources/views' => base_path('resources/views/vendor/axterisko'),
-        ], 'inspinia.views');*/
-
-        // Publishing assets.
-        /*$this->publishes([
-            __DIR__.'/../resources/assets' => public_path('vendor/axterisko'),
-        ], 'inspinia.views');*/
-
-        // Publishing the translation files.
-        /*$this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/axterisko'),
-        ], 'inspinia.views');*/
 
         // Registering package commands.
         // $this->commands([]);
