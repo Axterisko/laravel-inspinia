@@ -13,7 +13,7 @@
                 <ul class="dropdown-menu animated fadeInRight m-t-xs">
                     @yield('user-menu')
                     <li>
-                        <form id="logout-form" action="{{ url('logout') }}" method="POST" style="display: none;">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                         <a class="dropdown-item" href=""

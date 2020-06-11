@@ -8,7 +8,7 @@
             <ul class="nav navbar-top-links navbar-right">
                 @yield('top-links')
                 <li>
-                    <form id="logout-form" action="{{ url('logout') }}" method="POST" style="display: none;">
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
                     <a href="" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
