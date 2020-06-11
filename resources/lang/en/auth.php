@@ -25,7 +25,7 @@ return [
         'login' => 'Login',
     ],
     'verify' => [
-        'welcome_title' => 'Verify Your Email Addres',
+        'welcome_title' => 'Verify Your Email Address',
         'welcome_subtitle' => '',
         'success_message' => 'A fresh verification link has been sent to your email address.',
         'check_email_for_link' => 'Before proceeding, please check your email for a verification link.',

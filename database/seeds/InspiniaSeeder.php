@@ -55,7 +55,7 @@ class InspiniaSeeder extends Seeder
             ]);
 
         }
-        $user->assignRole('Amministratore');
+        $user->assignRole('Administrators');
 
     }
 }
