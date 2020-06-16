@@ -13,7 +13,11 @@
                     {{ $actions }}
                 </div>
             @endisset
-
+            @isset($description)
+                <div class="axt-sheet-header__description">
+                    {{ $description }}
+                </div>
+            @endisset
         </div>
         <div class="sheet-scrollpane">
             <div class="sheet-content  sheet-padding">

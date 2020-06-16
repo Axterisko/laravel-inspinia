@@ -22,6 +22,7 @@
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-8">
             <h2>@yield('content-title', '')</h2>
+            @yield('content-description', '')
             @yield('breadcrumbs')
         </div>
         <div class="col-lg-4">
