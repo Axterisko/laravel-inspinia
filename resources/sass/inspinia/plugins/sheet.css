@@ -716,7 +716,7 @@ html.enableFixedHeader .axt-sheet {
     opacity: .5
 }
 
-.axt-sheet .axt-sheet-header__actions i:last-child, .axt-sheet .axt-sheet-header__actions axt-menu-filter:last-child, .axt-sheet .axt-sheet-header__actions axt-icon-menu:last-child {
+.axt-sheet .axt-sheet-header__actions i:last-child, .axt-sheet .axt-sheet-header__actions .axt-menu-filter:last-child, .axt-sheet .axt-sheet-header__actions .axt-icon-menu:last-child {
     margin-right: -8px
 }
 

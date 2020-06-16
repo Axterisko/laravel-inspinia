@@ -9,9 +9,6 @@
             <div class="axt-sheet-header__actions">
                 @yield('actions')
             </div>
-            <div class="axt-sheet-header__description">
-            @yield('content-description', '')
-            </div>
         </div>
         <div class="sheet-scrollpane">
             <div class="sheet-content  sheet-padding">

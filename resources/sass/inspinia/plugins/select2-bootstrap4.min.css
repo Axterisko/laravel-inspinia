@@ -192,7 +192,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap4 .select2-select
 .select2-container--bootstrap4 .select2-selection__clear {
     width: 1.2em;
     height: 1.2em;
-    line-height: 1.15em;
+    line-height: 1.20em;
     padding-left: .3em;
     margin-top: .5em;
     border-radius: 100%;
