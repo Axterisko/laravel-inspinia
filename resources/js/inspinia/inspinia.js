@@ -341,8 +341,10 @@ function loadSheet(url, options) {
                     return false;
                 });
                 $form.submit(function (e) {
-                    $form.find('.bs-callout-errors').addClass('hidden').find('ul>li').remove();
-                    $form.find('.form-group.has-error').removeClass('has-error').find('.help-block').remove();
+                    $form.trigger('submitStart');
+                    $form.find('.bs-callout-errors').addClass('d-none').find('ul>li').remove();
+                    $form.find('.form-group.has-error').removeClass('has-error').find('.invalid-feedback').remove();
+                    $form.find('.is-invalid').removeClass('is-invalid');
                     axios.post($form.attr('action'), $form.serialize())
                         .then(function (res) {
                             $form.trigger('submitDone', res);
@@ -352,9 +354,9 @@ function loadSheet(url, options) {
                             var $errContainer = $form.find('.bs-callout-errors');
                             $.each(err.response.data.errors, function (field, errors) {
                                 $errContainer.find('ul').append($('<li>').text(errors));
-                                $form.find('[name="' + field + '"]').parents('.form-group').addClass('has-error').append($('<span>').addClass('help-block').html('<strong>' + errors[0] + '</strong>'));
+                                $form.find('[name="' + field + '"]').addClass('is-invalid').parents('.form-group').addClass('has-error').append($('<span>').addClass('invalid-feedback').html('<strong>' + errors[0] + '</strong>'));
                             });
-                            $errContainer.removeClass('hidden');
+                            $errContainer.removeClass('d-none');
                         }
                         $form.trigger('submitFail', err);
                     });

@@ -12,7 +12,7 @@ class InspiniaMakeCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:inspinia {--views : Only scaffold the views} {--no-webpack : Bypass webpack scaffold}  {--no-auth : Bypass auth scaffold} {--no-dependencies : Bypass dependencies scaffold} {--no-seeder : Bypass seeder scaffold}';
+    protected $signature = 'make:inspinia {--views : Only scaffold the views} {--assets : Only scaffold the assets} {--no-webpack : Bypass webpack scaffold}  {--no-auth : Bypass auth scaffold} {--no-dependencies : Bypass dependencies scaffold} {--no-seeder : Bypass seeder scaffold}';
 
     /**
      * The console command description.
@@ -68,51 +68,61 @@ class InspiniaMakeCommand extends Command
     {
         $this->info('Start Inspinia scaffolding');
 
-        if (!$this->option('views')) {
-            if (!$this->option('no-dependencies')) {
-                $this->info('Publish dependencies');
-                $this->call('vendor:publish', ['--tag' => 'laravel-noty']);
-                $this->call('vendor:publish', ['--tag' => 'datatables-buttons']);
-                $this->call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
-            }
-            if (!$this->option('no-auth')) {
-                $this->info('Execute make:auth');
-                $this->call('ui:auth', ['--views' => $this->option('views')]);
-            }
-        }
-        $this->info('Copying views...');
-        $this->createDirectories();
-        foreach ($this->views as $key => $value) {
-            copy(
-                __DIR__ . '/stubs/make/views/' . $key,
-                resource_path('views/' . $value)
-            );
-        }
-        if (!$this->option('views')) {
+        if ($this->option('assets')) {
             $this->info('Copying assets...');
             $this->xcopy(__DIR__ . '/../../../resources/js', resource_path('js'));
             $this->xcopy(__DIR__ . '/../../../resources/sass', resource_path('sass'));
             $this->info('Copying public...');
             $this->xcopy(__DIR__ . '/../../../public', public_path());
-            if (!$this->option('no-seeder')) {
-                $this->info('Copying seeder...');
-                $this->xcopy(__DIR__ . '/../../../database/seeds', database_path('seeds'));
-                $this->info('Dump autoload...');
-                $this->composer->dumpAutoloads();
+
+        }else {
+
+            if (!$this->option('views')) {
+                if (!$this->option('no-dependencies')) {
+                    $this->info('Publish dependencies');
+                    $this->call('vendor:publish', ['--tag' => 'laravel-noty']);
+                    $this->call('vendor:publish', ['--tag' => 'datatables-buttons']);
+                    $this->call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
+                }
+                if (!$this->option('no-auth')) {
+                    $this->info('Execute make:auth');
+                    $this->call('ui:auth', ['--views' => $this->option('views')]);
+                }
             }
-
-            if (!$this->option('no-webpack')) {
-
-                file_put_contents(
-                    base_path('webpack.mix.js'),
-                    file_get_contents(__DIR__ . '/stubs/make/webpack.mix.stub'),
-                    FILE_APPEND
+            $this->info('Copying views...');
+            $this->createDirectories();
+            foreach ($this->views as $key => $value) {
+                copy(
+                    __DIR__ . '/stubs/make/views/' . $key,
+                    resource_path('views/' . $value)
                 );
+            }
+            if (!$this->option('views')) {
+                $this->info('Copying assets...');
+                $this->xcopy(__DIR__ . '/../../../resources/js', resource_path('js'));
+                $this->xcopy(__DIR__ . '/../../../resources/sass', resource_path('sass'));
+                $this->info('Copying public...');
+                $this->xcopy(__DIR__ . '/../../../public', public_path());
+                if (!$this->option('no-seeder')) {
+                    $this->info('Copying seeder...');
+                    $this->xcopy(__DIR__ . '/../../../database/seeds', database_path('seeds'));
+                    $this->info('Dump autoload...');
+                    $this->composer->dumpAutoloads();
+                }
 
-                file_put_contents(
-                    base_path('package.json'),
-                    file_get_contents(__DIR__ . '/stubs/make/package.stub')
-                );
+                if (!$this->option('no-webpack')) {
+
+                    file_put_contents(
+                        base_path('webpack.mix.js'),
+                        file_get_contents(__DIR__ . '/stubs/make/webpack.mix.stub'),
+                        FILE_APPEND
+                    );
+
+                    file_put_contents(
+                        base_path('package.json'),
+                        file_get_contents(__DIR__ . '/stubs/make/package.stub')
+                    );
+                }
             }
         }
         $this->info('Inspinia scaffolding generated successfully.');
