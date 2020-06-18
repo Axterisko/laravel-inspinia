@@ -13,11 +13,11 @@
                 <ul class="dropdown-menu animated fadeInRight m-t-xs">
                     @yield('user-menu')
                     <li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <form id="logout-form2" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                         <a class="dropdown-item" href=""
-                           onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+                           onclick="event.preventDefault();document.getElementById('logout-form2').submit();">Logout</a>
                     </li>
                 </ul>
             </div>
