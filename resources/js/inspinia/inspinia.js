@@ -317,6 +317,77 @@ function WinMove() {
 })(jQuery, jQuery.fn.dataTable);
 
 
+function initAjaxForm($form){
+
+    if($form.hasClass('ajax-form-init')) return $form;
+
+    $form.find('[type=reset]').on('click', function (e) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        if($form.closest('.axt-sheet').length)
+            $form.closest('.axt-sheet').trigger('close');
+        $form.trigger('cancel');
+        return false;
+    });
+    $form.submit(function (e) {
+
+
+        if($form.closest('.ibox-content').length)
+            $form.closest('.ibox-content').addClass('sk-loading');
+        $form.find('[type=submit]').button('loading');
+
+        if($form.data('alternate-submit') && $form.data('alternate-submit').length)
+            $form.data('alternate-submit').button('loading');
+
+        $form.find('.bs-callout-errors').addClass('d-none').find('ul>li').remove();
+        $form.find('.form-group.has-error').removeClass('has-error').find('.invalid-feedback').remove();
+        $form.find('.is-invalid').removeClass('is-invalid');
+        axios.post($form.attr('action'), $form.serialize())
+            .then(function (res) {
+                $form.trigger('submitDone', res);
+                $form.find('[type=submit]').button('reset');
+                if($form.data('alternate-submit') && $form.data('alternate-submit').length)
+                    $form.data('alternate-submit').button('reset');
+                if($form.closest('.ibox-content').length)
+                    $form.closest('.ibox-content').removeClass('sk-loading');
+
+                if(res.data.message) noty(res.data.message, res.data.messageType ? res.data.messageType : 'success');
+
+                console.log($form.data('close-sheet'));
+
+                if($form.closest('.axt-sheet').length && $form.data('close-sheet') !== false)
+                    $form.closest('.axt-sheet').trigger('close');
+
+                if($('.dataTable').length) {
+                    var table = new $.fn.dataTable.Api($('.dataTable'));
+                    table.ajax.reload();
+                }
+
+
+            }).catch(function (err) {
+            if (err.response && err.response.data.errors) {
+                var $errContainer = $form.find('.bs-callout-errors');
+                $.each(err.response.data.errors, function (field, errors) {
+                    $errContainer.find('ul').append($('<li>').text(errors));
+                    $form.find('[name="' + field + '"]').addClass('is-invalid').parents('.form-group').addClass('has-error').append($('<span>').addClass('invalid-feedback').html('<strong>' + errors[0] + '</strong>'));
+                });
+                $errContainer.removeClass('d-none');
+            }
+            $form.trigger('submitFail', err);
+            $form.find('[type=submit]').button('reset');
+            if($form.data('alternate-submit') && $form.data('alternate-submit').length)
+                $form.data('alternate-submit').button('reset');
+            if($form.closest('.ibox-content').length)
+                $form.closest('.ibox-content').removeClass('sk-loading');
+
+        });
+        return false;
+    });
+    $form.addClass('ajax-form-init');
+    return $form;
+}
+
 function loadSheet(url, options) {
 
     var $sheet = openSheet(options.size ? options.size : 0.75);
@@ -328,43 +399,22 @@ function loadSheet(url, options) {
             if ($form.length) {
                 var $actions = $sheet.find('.axt-sheet-header__actions');
                 if ($actions.length) {
-                    $actions.find('[type="submit"]').click(function () {
-                        $form.submit();
-                    });
+                    if($actions.find('[type="submit"]').length) {
+                        if(!$actions.find('[type="submit"]').data('loading-text'))
+                            $actions.find('[type="submit"]').data('loading-text',$form.find('[type=submit]').data('loading-text'))
+                        $form.data('alternate-submit', $actions.find('[type="submit"]'));
+                        $actions.find('[type="submit"]').click(function () {
+                            $form.submit();
+                        });
+                    }
                 }
-                $form.find('[type=reset]').on('click', function (e) {
-                    e.stopPropagation();
-                    e.stopImmediatePropagation();
-                    e.preventDefault();
-                    $form.closest('.axt-sheet').trigger('close');
-                    $form.trigger('cancel');
-                    return false;
-                });
-                $form.submit(function (e) {
-                    $form.trigger('submitStart');
-                    $form.find('.bs-callout-errors').addClass('d-none').find('ul>li').remove();
-                    $form.find('.form-group.has-error').removeClass('has-error').find('.invalid-feedback').remove();
-                    $form.find('.is-invalid').removeClass('is-invalid');
-                    axios.post($form.attr('action'), $form.serialize())
-                        .then(function (res) {
-                            $form.trigger('submitDone', res);
-                        }).catch(function (err) {
-                        console.log(err);
-                        if (err.response && err.response.data.errors) {
-                            var $errContainer = $form.find('.bs-callout-errors');
-                            $.each(err.response.data.errors, function (field, errors) {
-                                $errContainer.find('ul').append($('<li>').text(errors));
-                                $form.find('[name="' + field + '"]').addClass('is-invalid').parents('.form-group').addClass('has-error').append($('<span>').addClass('invalid-feedback').html('<strong>' + errors[0] + '</strong>'));
-                            });
-                            $errContainer.removeClass('d-none');
-                        }
-                        $form.trigger('submitFail', err);
-                    });
-                    return false;
-                });
+
+                initAjaxForm($form);
+
+
             }
 
-            $(document).trigger('sheet:loaded',[$sheet]);
+            $(document).trigger('sheet:loaded', [$sheet]);
 
         });
 }
@@ -595,4 +645,74 @@ $(function () {
         }
     });
 
+    $(document).on('submit', 'form', function (e) {
+        if($(this).closest('.ibox-content').length)
+            $(this).closest('.ibox-content').addClass('sk-loading');
+
+        $(this).find('[type=submit]').button('loading');
+    });
+
+    $('form[data-ajax]').each(function(i, form){
+        initAjaxForm($(form));
+    });
+
 });
+
+(function ($) {
+    $.fn.button = function (action) {
+        if (this.length > 0) {
+            this.each(function () {
+                if (action === 'loading' && $(this).data('loading-text')) {
+                    $(this).data('original-text', $(this).html()).html($(this).data('loading-text')).prop('disabled', true);
+                } else if (action === 'reset' && $(this).data('original-text')) {
+                    $(this).html($(this).data('original-text')).prop('disabled', false);
+                }
+            });
+        }
+    };
+}(jQuery));
+
+
+window.noty = function(text, type, options){
+    var options = options ? options : {};
+    var type = type ? type : 'alert';
+
+    var defaultOptions = {
+        type: 'alert',
+        theme: 'bootstrap-v4',
+        progressBar: true,
+        queue: 'global',
+        timeout: 3000
+    }
+
+
+    if(type == 'confirm'){
+        type = 'alert';
+        options = $.extend(defaultOptions, options, {
+            type: 'alert',
+            dismissQueue: true,
+            layout: 'center',
+            theme: 'bootstrap-v4',
+            modal: true,
+            killer: true,
+            progressBar: false,
+            closeWith: ['button'],
+            buttons: [
+                Noty.button( options.confirmText ? options.confirmText : 'Si', 'btn btn-sm btn-primary', function () {
+                    if (options.confirm && typeof options.confirm === 'function') options.confirm.call();
+                    n.close();
+                }),
+
+                Noty.button(options.cancelText ? options.cancelText : 'No', 'btn btn-sm btn-default', function () {
+                    if (options.cancel && typeof options.cancel === 'function') options.cancel.call();
+                    n.close();
+                })
+            ]
+        });
+    }
+
+    options = $.extend(defaultOptions, options, {text: text, type: type});
+
+    var n = new Noty(options).show();
+    return n;
+}
