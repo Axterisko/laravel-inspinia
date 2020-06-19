@@ -390,7 +390,7 @@ function initAjaxForm($form){
 
 window.loadSheet = function(url, options) {
 
-    var $sheet = openSheet(options.size ? options.size : 0.75);
+    var $sheet = openSheet(options && options.size ? options.size : 0.75);
     // Optionally the request above could also be done as
     return axios.get(url)
         .then(function (response) {
