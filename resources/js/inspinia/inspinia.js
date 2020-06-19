@@ -651,10 +651,16 @@ $(function () {
     });
 
     $(document).on('submit', 'form', function (e) {
-        if($(this).closest('.ibox-content').length)
-            $(this).closest('.ibox-content').addClass('sk-loading');
+        var $form = $(this);
 
-        $(this).find('[type=submit]').button('loading');
+        if($form.closest('.ibox-content').length)
+            $form.closest('.ibox-content').addClass('sk-loading');
+
+        $form.find('.bs-callout-errors').addClass('d-none').find('ul>li').remove();
+        $form.find('.form-group.has-error').removeClass('has-error').find('.invalid-feedback').remove();
+        $form.find('.is-invalid').removeClass('is-invalid');
+
+        $form.find('[type=submit]').button('loading');
     });
 
     $('form[data-ajax]').each(function(i, form){
