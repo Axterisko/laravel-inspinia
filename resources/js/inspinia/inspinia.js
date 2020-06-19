@@ -388,7 +388,7 @@ function initAjaxForm($form){
     return $form;
 }
 
-function loadSheet(url, options) {
+window.loadSheet = function(url, options) {
 
     var $sheet = openSheet(options.size ? options.size : 0.75);
     // Optionally the request above could also be done as
@@ -419,7 +419,7 @@ function loadSheet(url, options) {
         });
 }
 
-function resizeSheet() {
+window.resizeSheet = function() {
     var $sheetHolder = $('.axt-sheet-holder');
     var width = $(window).width();
     $sheetHolder.find('.axt-sheet.open').each(function () {
@@ -436,8 +436,8 @@ function resizeSheet() {
     });
 }
 
-function openSheet(options) {
-    var size = options.size ? options.size : 0.75
+window.openSheet = function(options) {
+    var size = options && options.size ? options.size : 0.75
     $('body').addClass('axt-disable-scroll');
     var width = $(window).width();
     var $sheetHolder = $('.axt-sheet-holder');
@@ -461,7 +461,7 @@ function openSheet(options) {
         return $sheet.trigger('close');
     });
 
-    if (options.target) {
+    if (options && options.target) {
         $target = $(options.target).clone();
         $sheet.html($target.html());
     }
@@ -472,7 +472,12 @@ function openSheet(options) {
     return $sheet;
 }
 
-function closeSheet($sheet) {
+window.closeSheet = function($sheet) {
+
+    if(!$sheet)
+        var $sheet = $('.axt-sheet.open');
+
+
     $('body').removeClass('axt-disable-scroll');
     var width = $(window).width();
     $sheet.nextAll().remove();
