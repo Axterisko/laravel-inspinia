@@ -9,6 +9,17 @@ return [
     //fixed
     'footer-skin' => 'fixed',
 
+    /**
+     * Amount of days before a user's password must be changed
+     */
+    'password_life' => 90,  // Days
+
+    /**
+     * Force password change for users that have no history
+     */
+    'force_password_change' => true,
+
+
     'admin' => [
         'username' => 'admin',
         'email' => 'admin@example.it',

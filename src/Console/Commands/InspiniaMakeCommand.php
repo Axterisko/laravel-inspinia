@@ -33,6 +33,7 @@ class InspiniaMakeCommand extends Command
         'auth/passwords/email.stub' => 'auth/passwords/email.blade.php',
         'auth/passwords/reset.stub' => 'auth/passwords/reset.blade.php',
         'auth/passwords/confirm.stub' => 'auth/passwords/confirm.blade.php',
+        'auth/passwords/renew.stub' => 'auth/passwords/renew.blade.php',
         'errors/403.stub' => 'errors/403.blade.php',
         'errors/404.stub' => 'errors/404.blade.php',
         'errors/419.stub' => 'errors/419.blade.php',

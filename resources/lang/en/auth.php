@@ -54,5 +54,15 @@ return [
             'confirm_password' => 'Confirm Password',
             'forgot_password' => 'Forgot password?',
         ],
+        'renew' => [
+            'password_expired' => 'Password expired',
+            'welcome_title' => 'Renew password',
+            'welcome_subtitle' => '',
+            'old_password' => 'Old password',
+            'new_password' => 'New password',
+            'confirm_new_password' => 'Confirm new password',
+            'renew_password' => 'Renew password',
+            'renew_confirmed' => 'Password renewed'
+        ],
     ]
 ];

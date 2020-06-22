@@ -2,10 +2,9 @@
 
 namespace Axterisko\Inspinia;
 
-use Illuminate\Support\ServiceProvider;
 use Axterisko\Inspinia\Console\Commands\InspiniaMakeCommand;
-use Spatie\Menu\Laravel\Link;
-use Spatie\Menu\Laravel\Menu;
+use Axterisko\Inspinia\Middleware\PasswordNotExpired;
+use Illuminate\Support\ServiceProvider;
 
 class InspiniaServiceProvider extends ServiceProvider
 {
@@ -17,13 +16,15 @@ class InspiniaServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/inspinia.php' => config_path('inspinia.php'),
+            __DIR__ . '/../config/inspinia.php' => config_path('inspinia.php'),
         ], 'laravel-inspinia-config');
 
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'inspinia');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'inspinia');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
+
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         $this->publishes([
             __DIR__ . '/../config/inspinia.php' => config_path('inspinia.php'),
@@ -38,6 +39,10 @@ class InspiniaServiceProvider extends ServiceProvider
                 InspiniaMakeCommand::class,
             ]);
         }
+
+        $this->app['router']->aliasMiddleware('password.not-expired', PasswordNotExpired::class);
+
+
     }
 
     /**
