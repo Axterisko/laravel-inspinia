@@ -314,18 +314,78 @@ function WinMove() {
         }
     });
 
+    var _buildUrl = function (dt, action) {
+        var url = dt.ajax.url() || '';
+        var params = dt.ajax.params();
+        params.action = action;
+
+        if (url.indexOf('?') > -1) {
+            return url + '&' + $.param(params);
+        }
+
+        return url + '?' + $.param(params);
+    };
+
+    DataTable.ext.buttons.destroySelected = {
+        className: 'buttons-destroySelected',
+
+        text: function (dt) {
+            return '<i class="fa fa-trash"></i> ' + dt.i18n('buttons.destroySelected', 'Elimina') + " <span class=\"badge badge-pill\">0</span>";
+        },
+
+        action: function (e, dt, button, config) {
+            var href = window.location.href.replace(/\/+$/, "");
+            var selected = $(button).data('selected');
+            if (!selected.length) return false;
+            var $table = $(dt.table().node());
+            var tableId = $table.attr('id');
+
+            noty(dt.i18n('confirm.destroySelected', {
+                _: 'Sei sicuro di voler eliminare le %d righe selezionate?',
+                1: 'Sei sicuro di voler eliminare la riga selezionata?'
+            }, selected.length), 'confirm', {
+                confirm: function () {
+                    $table.trigger('delete:start', [selected]);
+                    axios.delete(href, {data: {ids: selected}}).then(function (response) {
+                        if (response.data.message) noty(response.data.message,'success');
+                        datatables_rows_selected[tableId] = new Array();
+                        dt.ajax.reload();
+                        $table.trigger('delete:done', [response, selected]);
+
+                    })
+                        .catch(function (error) {
+                            $table.trigger('delete:fail', [error, selected]);
+                        });
+                }
+            })
+        }
+    };
+
+    DataTable.ext.buttons.createSheet = {
+        className: 'buttons-create',
+
+        text: function (dt) {
+            return '<i class="fa fa-plus"></i> ' + dt.i18n('buttons.create', 'Create');
+        },
+
+        action: function (e, dt, button, config) {
+            loadSheet(window.location.href.replace(/\/+$/, "") + '/create');
+            //window.location = window.location.href.replace(/\/+$/, "") + '/create';
+        }
+    };
+
 })(jQuery, jQuery.fn.dataTable);
 
 
-function initAjaxForm($form){
+function initAjaxForm($form) {
 
-    if($form.hasClass('ajax-form-init')) return $form;
+    if ($form.hasClass('ajax-form-init')) return $form;
 
     $form.find('[type=reset]').on('click', function (e) {
         e.stopPropagation();
         e.stopImmediatePropagation();
         e.preventDefault();
-        if($form.closest('.axt-sheet').length)
+        if ($form.closest('.axt-sheet').length)
             $form.closest('.axt-sheet').trigger('close');
         $form.trigger('cancel');
         return false;
@@ -333,11 +393,11 @@ function initAjaxForm($form){
     $form.submit(function (e) {
 
 
-        if($form.closest('.ibox-content').length)
+        if ($form.closest('.ibox-content').length)
             $form.closest('.ibox-content').addClass('sk-loading');
         $form.find('[type=submit]').button('loading');
 
-        if($form.data('alternate-submit') && $form.data('alternate-submit').length)
+        if ($form.data('alternate-submit') && $form.data('alternate-submit').length)
             $form.data('alternate-submit').button('loading');
 
         $form.find('.bs-callout-errors').addClass('d-none').find('ul>li').remove();
@@ -347,19 +407,18 @@ function initAjaxForm($form){
             .then(function (res) {
                 $form.trigger('submitDone', res);
                 $form.find('[type=submit]').button('reset');
-                if($form.data('alternate-submit') && $form.data('alternate-submit').length)
+                if ($form.data('alternate-submit') && $form.data('alternate-submit').length)
                     $form.data('alternate-submit').button('reset');
-                if($form.closest('.ibox-content').length)
+                if ($form.closest('.ibox-content').length)
                     $form.closest('.ibox-content').removeClass('sk-loading');
 
-                if(res.data.message) noty(res.data.message, res.data.messageType ? res.data.messageType : 'success');
+                if (res.data.message) noty(res.data.message, res.data.messageType ? res.data.messageType : 'success');
 
-                console.log($form.data('close-sheet'));
 
-                if($form.closest('.axt-sheet').length && $form.data('close-sheet') !== false)
+                if ($form.closest('.axt-sheet').length && $form.data('close-sheet') !== false)
                     $form.closest('.axt-sheet').trigger('close');
 
-                if($('.dataTable').length) {
+                if ($('.dataTable').length) {
                     var table = new $.fn.dataTable.Api($('.dataTable'));
                     table.ajax.reload();
                 }
@@ -376,9 +435,9 @@ function initAjaxForm($form){
             }
             $form.trigger('submitFail', err);
             $form.find('[type=submit]').button('reset');
-            if($form.data('alternate-submit') && $form.data('alternate-submit').length)
+            if ($form.data('alternate-submit') && $form.data('alternate-submit').length)
                 $form.data('alternate-submit').button('reset');
-            if($form.closest('.ibox-content').length)
+            if ($form.closest('.ibox-content').length)
                 $form.closest('.ibox-content').removeClass('sk-loading');
 
         });
@@ -388,7 +447,7 @@ function initAjaxForm($form){
     return $form;
 }
 
-window.loadSheet = function(url, options) {
+window.loadSheet = function (url, options) {
 
     var $sheet = openSheet(options && options.size ? options.size : 0.75);
     // Optionally the request above could also be done as
@@ -399,9 +458,9 @@ window.loadSheet = function(url, options) {
             if ($form.length) {
                 var $actions = $sheet.find('.axt-sheet-header__actions');
                 if ($actions.length) {
-                    if($actions.find('[type="submit"]').length) {
-                        if(!$actions.find('[type="submit"]').data('loading-text'))
-                            $actions.find('[type="submit"]').data('loading-text',$form.find('[type=submit]').data('loading-text'))
+                    if ($actions.find('[type="submit"]').length) {
+                        if (!$actions.find('[type="submit"]').data('loading-text'))
+                            $actions.find('[type="submit"]').data('loading-text', $form.find('[type=submit]').data('loading-text'))
                         $form.data('alternate-submit', $actions.find('[type="submit"]'));
                         $actions.find('[type="submit"]').click(function () {
                             $form.submit();
@@ -416,10 +475,12 @@ window.loadSheet = function(url, options) {
 
             $(document).trigger('sheet:loaded', [$sheet]);
 
+        }).catch(function (error) {
+            $(document).trigger('sheet:error', [$sheet, error]);
         });
 }
 
-window.resizeSheet = function() {
+window.resizeSheet = function () {
     var $sheetHolder = $('.axt-sheet-holder');
     var width = $(window).width();
     $sheetHolder.find('.axt-sheet.open').each(function () {
@@ -436,7 +497,7 @@ window.resizeSheet = function() {
     });
 }
 
-window.openSheet = function(options) {
+window.openSheet = function (options) {
     var size = options && options.size ? options.size : 0.75
     $('body').addClass('axt-disable-scroll');
     var width = $(window).width();
@@ -472,9 +533,9 @@ window.openSheet = function(options) {
     return $sheet;
 }
 
-window.closeSheet = function($sheet) {
+window.closeSheet = function ($sheet) {
 
-    if(!$sheet)
+    if (!$sheet)
         var $sheet = $('.axt-sheet.open');
 
 
@@ -653,7 +714,7 @@ $(function () {
     $(document).on('submit', 'form', function (e) {
         var $form = $(this);
 
-        if($form.closest('.ibox-content').length)
+        if ($form.closest('.ibox-content').length)
             $form.closest('.ibox-content').addClass('sk-loading');
 
         $form.find('.bs-callout-errors').addClass('d-none').find('ul>li').remove();
@@ -663,10 +724,19 @@ $(function () {
         $form.find('[type=submit]').button('loading');
     });
 
-    $('form[data-ajax]').each(function(i, form){
+    $('form[data-ajax]').each(function (i, form) {
         initAjaxForm($(form));
     });
 
+    $(document).on('load:selected', 'table.dataTable', function (e, selected) {
+        var $btn = $(this).closest('.dataTables_wrapper').find('.dt-buttons .buttons-destroySelected');
+        if ($btn.length) {
+            $btn.each(function () {
+                $(this).data('selected', selected).find('.badge').text(selected.length);
+            });
+        }
+
+    });
 });
 
 (function ($) {
@@ -684,7 +754,7 @@ $(function () {
 }(jQuery));
 
 
-window.noty = function(text, type, options){
+window.noty = function (text, type, options) {
     var options = options ? options : {};
     var type = type ? type : 'alert';
 
@@ -697,19 +767,20 @@ window.noty = function(text, type, options){
     }
 
 
-    if(type == 'confirm'){
+    if (type == 'confirm') {
         type = 'alert';
         options = $.extend(defaultOptions, options, {
             type: 'alert',
             dismissQueue: true,
             layout: 'center',
             theme: 'bootstrap-v4',
+            timeout: 0,
             modal: true,
             killer: true,
             progressBar: false,
             closeWith: ['button'],
             buttons: [
-                Noty.button( options.confirmText ? options.confirmText : 'Si', 'btn btn-sm btn-primary', function () {
+                Noty.button(options.confirmText ? options.confirmText : 'Si', 'btn btn-sm btn-primary', function () {
                     if (options.confirm && typeof options.confirm === 'function') options.confirm.call();
                     n.close();
                 }),

@@ -5,7 +5,7 @@
 @import "~font-awesome/scss/font-awesome";
 
 // iCheck
-@import "~icheck/skins/square/green.css";
+@import "~icheck/skins/square/grey.css";
 
 // Animate.css
 @import "~animate.css/animate.css";
@@ -28,11 +28,11 @@
 
 //Noty
 @import "~noty/src/noty.scss";
-@import "~noty/src/themes/mint.scss";
 @import "~noty/src/themes/bootstrap-v4.scss";
 
 // DataTables
 @import "~datatables.net-bs4/css/dataTables.bootstrap4.css";
+@import "~datatables.net-responsive-bs4/css/responsive.bootstrap4.css";
 @import "~datatables.net-buttons-bs4/css/buttons.bootstrap4.css";
 
 //Sheet
@@ -61,4 +61,10 @@ table.dataTable tbody tr.selected {
 
 .select2-dropdown {
     z-index: 9999;
+}
+.noty_buttons button{
+    margin-left: 5px;
+}
+.noty_buttons button:first-child{
+    margin-left: 0;
 }

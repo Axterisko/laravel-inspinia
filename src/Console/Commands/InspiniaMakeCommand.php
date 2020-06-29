@@ -12,7 +12,7 @@ class InspiniaMakeCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'make:inspinia {--views : Only scaffold the views} {--assets : Only scaffold the assets} {--no-webpack : Bypass webpack scaffold}  {--no-auth : Bypass auth scaffold} {--no-dependencies : Bypass dependencies scaffold} {--no-seeder : Bypass seeder scaffold}';
+    protected $signature = 'make:inspinia {--views : Only scaffold the views} {--models : Only scaffold the models} {--controllers : Only scaffold the controllers} {--assets : Only scaffold the assets} {--no-webpack : Bypass webpack scaffold}  {--no-auth : Bypass auth scaffold} {--no-dependencies : Bypass dependencies scaffold} {--no-seeder : Bypass seeder scaffold}';
 
     /**
      * The console command description.
@@ -41,6 +41,27 @@ class InspiniaMakeCommand extends Command
         'layouts/sheet.stub' => 'layouts/sheet.blade.php',
         'home.stub' => 'home.blade.php',
     ];
+
+
+    /**
+     * The controllers that need to be exported.
+     *
+     * @var array
+     */
+    protected $controllers = [
+        'LoginController.stub' => 'Http/Controllers/Auth/LoginController.php',
+        'RenewPasswordController.stub' => 'Http/Controllers/Auth/RenewPasswordController.php',
+    ];
+
+    /**
+     * The models that need to be exported.
+     *
+     * @var array
+     */
+    protected $models = [
+        'User.stub' => 'User.php'
+    ];
+
     /**
      * The Composer instance.
      *
@@ -76,9 +97,9 @@ class InspiniaMakeCommand extends Command
             $this->info('Copying public...');
             $this->xcopy(__DIR__ . '/../../../public', public_path());
 
-        }else {
+        } else {
 
-            if (!$this->option('views')) {
+            if (!$this->option('views') && !$this->option('models') && !$this->option('controllers')) {
                 if (!$this->option('no-dependencies')) {
                     $this->info('Publish dependencies');
                     $this->call('vendor:publish', ['--tag' => 'laravel-noty']);
@@ -87,18 +108,43 @@ class InspiniaMakeCommand extends Command
                 }
                 if (!$this->option('no-auth')) {
                     $this->info('Execute make:auth');
-                    $this->call('ui:auth', ['--views' => $this->option('views')]);
+                    $this->call('ui:auth', ['--force' => true, '--views' => $this->option('views')]);
                 }
             }
-            $this->info('Copying views...');
-            $this->createDirectories();
-            foreach ($this->views as $key => $value) {
-                copy(
-                    __DIR__ . '/stubs/make/views/' . $key,
-                    resource_path('views/' . $value)
-                );
+            if (!$this->option('models') && !$this->option('controllers')) {
+                $this->info('Copying views...');
+                $this->createDirectories();
+                foreach ($this->views as $key => $value) {
+                    copy(
+                        __DIR__ . '/stubs/make/views/' . $key,
+                        resource_path('views/' . $value)
+                    );
+                }
             }
-            if (!$this->option('views')) {
+
+            if (!$this->option('models') && !$this->option('views')) {
+                $this->info('Copying controllers...');
+
+                foreach ($this->controllers as $key => $value) {
+                    copy(
+                        __DIR__ . '/stubs/make/controllers/' . $key,
+                        app_path($value)
+                    );
+                }
+            }
+
+            if (!$this->option('controllers') && !$this->option('views')) {
+                $this->info('Copying models...');
+
+                foreach ($this->models as $key => $value) {
+                    copy(
+                        __DIR__ . '/stubs/make/models/' . $key,
+                        app_path($value)
+                    );
+                }
+            }
+
+            if (!$this->option('views') && !$this->option('models') && !$this->option('controllers')) {
                 $this->info('Copying assets...');
                 $this->xcopy(__DIR__ . '/../../../resources/js', resource_path('js'));
                 $this->xcopy(__DIR__ . '/../../../resources/sass', resource_path('sass'));

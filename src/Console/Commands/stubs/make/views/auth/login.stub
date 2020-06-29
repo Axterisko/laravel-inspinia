@@ -10,12 +10,12 @@
             <form class="m-t" role="form" method="POST" action="{{ route('login') }}">
                 {{ csrf_field() }}
                 <div class="form-group">
-                    <input type="email" class="form-control @error('email')is-invalid @enderror"
-                           placeholder="{{ trans('inspinia::auth.login.username') }}" name="email"
-                           value="{{ old('email') }}" required autofocus>
-                    @error('email')
+                    <input type="text" class="form-control @error('username')is-invalid @enderror"
+                           placeholder="{{ trans('inspinia::auth.login.username') }}" name="username"
+                           value="{{ old('username') }}" required autofocus>
+                    @error('username')
                     <span class="invalid-feedback">
-                                            <strong>{{ $errors->first('email') }}</strong>
+                                            <strong>{{ $errors->first('username') }}</strong>
                                         </span>
                     @enderror
                 </div>

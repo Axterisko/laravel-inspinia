@@ -5,7 +5,7 @@ return [
     'login' => [
         'welcome_title' => 'Welcome to IN+',
         'welcome_subtitle' => 'Perfectly designed and precisely prepared admin theme with over 50 pages with extra new web app views.',
-        'username' => 'E-mail',
+        'username' => 'Username',
         'password' => 'Password',
         'remember_me' => 'Remember me',
         'forgot_password' => 'Forgot password?',

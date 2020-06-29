@@ -1,10 +1,5 @@
 <?php
 
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+Route::get('password/renew', "\\App\\Http\\Controllers\\Auth\\RenewPasswordController@showRenewForm")->name('password.expired');
+Route::post('password/renew', "\\App\\Http\\Controllers\\Auth\\RenewPasswordController@renew")->name('password.renew');
 
-Route::middleware('web')->group(function () {
-    Route::get('password/renew', "Axterisko\\Inspinia\\Controller\\RenewPasswordController@showRenewForm")->name('password.expired');
-    Route::post('password/renew', "Axterisko\\Inspinia\\Controller\\RenewPasswordController@renew")->name('password.renew');
-});

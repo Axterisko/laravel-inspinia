@@ -35,6 +35,8 @@ try {
 
     //Datatables
     require('datatables.net-bs4');
+    require('datatables.net-responsive');
+    require('datatables.net-responsive-bs4');
     require('datatables.net-buttons-bs4');
 
 
@@ -90,10 +92,11 @@ if (!window.console) {
     };
 }
 
-$(document).ready(function () {
+
+window.initWidget = function(){
     $('.i-checks').iCheck({
-        checkboxClass: 'icheckbox_square-green',
-        radioClass: 'iradio_square-green'
+        checkboxClass: 'icheckbox_square-grey',
+        radioClass: 'iradio_square-grey'
     });
     $('.js-datepicker').datepicker({
         todayHighlight: true
@@ -105,5 +108,13 @@ $(document).ready(function () {
         allowClear: true,
         dropdownAutoWidth: true,
         theme: 'bootstrap4'
+    });
+}
+
+$(document).ready(function () {
+    initWidget();
+
+    $(document).on('sheet:loaded',function($sheet){
+        initWidget();
     });
 });

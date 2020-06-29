@@ -1,11 +1,9 @@
 <?php
 
 
-namespace Axterisko\Inspinia\Controller;
+namespace Axterisko\Inspinia\Traits;
 
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Http\JsonResponse;
@@ -13,18 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class RenewPasswordController extends Controller
+trait RenewPassword
 {
-
     use RedirectsUsers;
-
-    /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
 
     /**
      * Get the guard to be used during password reset.

@@ -17,7 +17,8 @@ class PasswordNotExpired
      */
     public function handle($request, Closure $next)
     {
-        if (!Auth::check() || $request->routeIs(['password.expired','password.renew'])) {
+
+        if (!Auth::check() || in_array($request->route()->getName(),['password.expired','password.renew'])) {
             return $next($request);
         }
 

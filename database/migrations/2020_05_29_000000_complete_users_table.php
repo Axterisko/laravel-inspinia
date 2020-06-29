@@ -17,6 +17,7 @@ class CompleteUsersTable extends Migration
             $table->string('username')->unique();
             $table->dropUnique('users_email_unique');
             $table->dateTime('password_changed_at')->nullable();
+            $table->boolean('change_password_next_login')->nullable()->default(0);
         });
     }
 
@@ -28,7 +29,7 @@ class CompleteUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['username','password_changed_at']);
+            $table->dropColumn(['username','password_changed_at','change_password_next_login']);
             $table->unique('email');
         });
     }
