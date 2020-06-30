@@ -102,10 +102,10 @@ trait RenewPassword
         $message = trans('inspinia::auth.renew.renew_confirmed');
 
         if ($request->wantsJson()) {
-            return new JsonResponse(['message' => trans($message)], 200);
+            return new JsonResponse(['message' => $message], 200);
         }
 
         return redirect($this->redirectPath())
-            ->with('status', trans($message));
+            ->with('status', $message);
     }
 }
