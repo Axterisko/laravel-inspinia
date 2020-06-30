@@ -2,7 +2,11 @@
 @import "~bootstrap/scss/bootstrap";
 
 // Font-Awesome
-@import "~font-awesome/scss/font-awesome";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/v4-shims";
 
 // iCheck
 @import "~icheck/skins/square/grey.css";
