@@ -737,6 +737,43 @@ $(function () {
         }
 
     });
+
+
+    $(document).on('click', '[data-action=delete]', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var $this = $(this);
+        var confirm = $this.data('confirm')
+        var href = $this.attr('href');
+        var $table = $this.closest('table.dataTable');
+        if($table.length) var dt = new $.fn.dataTable.Api($table);
+        var deleteAction = function(){
+            if($table.length) $table.trigger('delete:start', [$this]);
+            else $this.trigger('delete:start', [$this]);
+            axios.delete(href).then(function (response) {
+                if (response.data.message) noty(response.data.message, 'success');
+                if(dt) dt.ajax.reload();
+                if($table.length) $table.trigger('delete:done', [response, $this]);
+                else $this.trigger('delete:done', [response, $this]);
+            })
+                .catch(function (error) {
+                    if($table.length) $table.trigger('delete:fail', [error, $this]);
+                    else $this.trigger('delete:fail', [error, $this]);
+                });
+        }
+        if (href) {
+            if (confirm) {
+                noty(confirm, 'confirm', {
+                    confirm: function () {
+                        deleteAction.call();
+                    }
+                });
+            } else {
+                deleteAction.call();
+            }
+        }
+    });
 });
 
 (function ($) {
