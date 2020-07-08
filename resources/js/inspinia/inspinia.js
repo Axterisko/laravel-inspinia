@@ -449,7 +449,11 @@ function initAjaxForm($form) {
 
 window.loadSheet = function (url, options) {
 
-    var $sheet = openSheet(options && options.size ? options.size : 0.75);
+
+    if(options && options.sheet && options.sheet.length)
+        var $sheet = options.sheet
+    else
+        var $sheet = openSheet(options && options.size ? options.size : 0.75);
     // Optionally the request above could also be done as
     return axios.get(url)
         .then(function (response) {
