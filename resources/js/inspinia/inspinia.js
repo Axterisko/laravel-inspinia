@@ -450,9 +450,12 @@ function initAjaxForm($form) {
 window.loadSheet = function (url, options) {
 
 
-    if(options && options.sheet && options.sheet.length)
-        var $sheet = options.sheet
-    else
+    if(options && options.sheet && options.sheet.length) {
+        var $sheet = options.sheet;
+        $sheet.addClass('sk-loading');
+        if(!$sheet.find('.sheet-sk-spinner').length)
+            $sheet.append("<div class=\"sheet-sk-spinner sk-spinner sk-spinner-wandering-cubes\"><div class=\"sk-cube1\"></div><div class=\"sk-cube2\"></div></div>");
+    }else
         var $sheet = openSheet(options && options.size ? options.size : 0.75);
     // Optionally the request above could also be done as
     return axios.get(url)
@@ -474,7 +477,7 @@ window.loadSheet = function (url, options) {
 
                 initAjaxForm($form);
 
-
+                $sheet.removeClass('sk-loading');
             }
 
             $(document).trigger('sheet:loaded', [$sheet]);
