@@ -369,8 +369,10 @@ function WinMove() {
         },
 
         action: function (e, dt, button, config) {
-            loadSheet(window.location.href.replace(/\/+$/, "") + '/create');
-            //window.location = window.location.href.replace(/\/+$/, "") + '/create';
+            var query = window.location.href.indexOf('?') != -1 ?  window.location.href.slice(window.location.href.indexOf('?') + 1) : '';
+            var url = window.location.href.replace(/\/+$/, "").replace("?"+query, '') + '/create'
+            url += query ? '?'+query : '';
+            loadSheet(url);
         }
     };
 
