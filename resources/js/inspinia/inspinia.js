@@ -405,7 +405,10 @@ function initAjaxForm($form) {
         $form.find('.bs-callout-errors').addClass('d-none').find('ul>li').remove();
         $form.find('.form-group.has-error').removeClass('has-error').find('.invalid-feedback').remove();
         $form.find('.is-invalid').removeClass('is-invalid');
-        axios.post($form.attr('action'), $form.serialize())
+
+        let formData = new FormData($form[0]);
+
+        axios.post($form.attr('action'),formData)
             .then(function (res) {
                 $form.trigger('submitDone', res);
                 $form.find('[type=submit]').button('reset');
