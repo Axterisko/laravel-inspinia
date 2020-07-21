@@ -334,7 +334,7 @@ function WinMove() {
         },
 
         action: function (e, dt, button, config) {
-            var href = window.location.href.replace(/\/+$/, "");
+            var href = config.href ? config.href : window.location.href.replace(/\/+$/, "");
             var selected = $(button).data('selected');
             if (!selected.length) return false;
             var $table = $(dt.table().node());
@@ -370,7 +370,7 @@ function WinMove() {
 
         action: function (e, dt, button, config) {
             var query = window.location.href.indexOf('?') != -1 ?  window.location.href.slice(window.location.href.indexOf('?') + 1) : '';
-            var url = window.location.href.replace(/\/+$/, "").replace("?"+query, '') + '/create'
+            var url = config.href ? config.href : window.location.href.replace(/\/+$/, "").replace("?"+query, '') + '/create'
             url += query ? '?'+query : '';
             loadSheet(url);
         }
@@ -538,9 +538,9 @@ window.openSheet = function (options) {
         $target = $(options.target).clone();
         $sheet.html($target.html());
     }
+    $(document).trigger('sheet:opened', [$sheet]);
 
     resizeSheet();
-
 
     return $sheet;
 }
@@ -567,6 +567,7 @@ window.closeSheet = function ($sheet) {
     if ($('.axt-sheet.open').length) {
         $('body').addClass('axt-disable-scroll');
     }
+    $(document).trigger('sheet:closed', [$sheet]);
 }
 
 //
