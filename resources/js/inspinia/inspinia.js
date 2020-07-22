@@ -327,7 +327,7 @@ function WinMove() {
     };
 
     DataTable.ext.buttons.destroySelected = {
-        className: 'buttons-destroySelected',
+        className: 'buttons-destroySelected buttons-badge',
 
         text: function (dt) {
             return '<i class="fa fa-trash"></i> ' + dt.i18n('buttons.destroySelected', 'Elimina') + " <span class=\"badge badge-pill\">0</span>";
@@ -742,7 +742,7 @@ $(function () {
     });
 
     $(document).on('load:selected', 'table.dataTable', function (e, selected) {
-        var $btn = $(this).closest('.dataTables_wrapper').find('.dt-buttons .buttons-destroySelected');
+        var $btn = $(this).closest('.dataTables_wrapper').find('.dt-buttons .buttons-selected');
         if ($btn.length) {
             $btn.each(function () {
                 $(this).data('selected', selected).find('.badge').text(selected.length);
