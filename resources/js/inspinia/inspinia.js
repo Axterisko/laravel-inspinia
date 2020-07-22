@@ -327,7 +327,7 @@ function WinMove() {
     };
 
     DataTable.ext.buttons.destroySelected = {
-        className: 'buttons-destroySelected buttons-badge',
+        className: 'buttons-destroySelected buttons-selected',
 
         text: function (dt) {
             return '<i class="fa fa-trash"></i> ' + dt.i18n('buttons.destroySelected', 'Elimina') + " <span class=\"badge badge-pill\">0</span>";
