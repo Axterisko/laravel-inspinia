@@ -18,7 +18,7 @@ class PasswordNotExpired
     public function handle($request, Closure $next)
     {
 
-        if (!Auth::check() || in_array($request->route()->getName(),['password.expired','password.renew'])) {
+        if (!Auth::check() || \Str::contains($request->route()->getName(),['password.expired','password.renew'])) {
             return $next($request);
         }
 
@@ -28,7 +28,7 @@ class PasswordNotExpired
 
             if ($request->ajax())
                 return response()->json([
-                    'message' => trans('inpsinia::auth.renew.password_expired')
+                    'message' => trans('inspinia::auth.renew.password_expired')
                 ], 401);
 
             return redirect()->route('password.expired');

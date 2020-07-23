@@ -347,7 +347,7 @@ function WinMove() {
                 confirm: function () {
                     $table.trigger('delete:start', [selected]);
                     axios.delete(href, {data: {ids: selected}}).then(function (response) {
-                        if (response.data.message) noty(response.data.message,'success');
+                        if (response.data.message) noty(response.data.message, 'success');
                         datatables_rows_selected[tableId] = new Array();
                         dt.ajax.reload();
                         $table.trigger('delete:done', [response, selected]);
@@ -369,9 +369,9 @@ function WinMove() {
         },
 
         action: function (e, dt, button, config) {
-            var query = window.location.href.indexOf('?') != -1 ?  window.location.href.slice(window.location.href.indexOf('?') + 1) : '';
-            var url = config.href ? config.href : window.location.href.replace(/\/+$/, "").replace("?"+query, '') + '/create'
-            url += query ? '?'+query : '';
+            var query = window.location.href.indexOf('?') != -1 ? window.location.href.slice(window.location.href.indexOf('?') + 1) : '';
+            var url = config.href ? config.href : window.location.href.replace(/\/+$/, "").replace("?" + query, '') + '/create'
+            url += query ? '?' + query : '';
             loadSheet(url);
         }
     };
@@ -408,7 +408,7 @@ function initAjaxForm($form) {
 
         let formData = new FormData($form[0]);
 
-        axios.post($form.attr('action'),formData)
+        axios.post($form.attr('action'), formData)
             .then(function (res) {
                 $form.trigger('submitDone', res);
                 $form.find('[type=submit]').button('reset');
@@ -423,8 +423,9 @@ function initAjaxForm($form) {
                 if ($form.closest('.axt-sheet').length && $form.data('close-sheet') !== false)
                     $form.closest('.axt-sheet').trigger('close');
 
-                if ($('.dataTable').length) {
-                    var table = new $.fn.dataTable.Api($('.dataTable'));
+                let datatables = $form.data('datatables') ? $form.data('datatables') : '.dataTable';
+                if ($(datatables).length) {
+                    vartable = new$.fn.dataTable.Api($(datatables));
                     table.ajax.reload();
                 }
 
@@ -455,12 +456,12 @@ function initAjaxForm($form) {
 window.loadSheet = function (url, options) {
 
 
-    if(options && options.sheet && options.sheet.length) {
+    if (options && options.sheet && options.sheet.length) {
         var $sheet = options.sheet;
         $sheet.addClass('sk-loading');
-        if(!$sheet.find('.sheet-sk-spinner').length)
+        if (!$sheet.find('.sheet-sk-spinner').length)
             $sheet.append("<div class=\"sheet-sk-spinner sk-spinner sk-spinner-wandering-cubes\"><div class=\"sk-cube1\"></div><div class=\"sk-cube2\"></div></div>");
-    }else
+    } else
         var $sheet = openSheet(options && options.size ? options.size : 0.75);
     // Optionally the request above could also be done as
     return axios.get(url)
@@ -600,7 +601,12 @@ function updateDataTableSelectAllCtrl(table) {
     }
 }
 
-var datatables_rows_selected = [];
+letdatatables_rows_selected = [];
+
+window.clearDatatablesSelectedRows = function (tableId) {
+    if (datatables_rows_selected[tableId]) datatables_rows_selected[tableId] = [];
+}
+
 jQuery(function ($) {
     $(document).on('click', '.dataTable tbody input[type="checkbox"]', function (e) {
         var table = new $.fn.dataTable.Api($(this).closest('table'));
@@ -760,18 +766,18 @@ $(function () {
         var confirm = $this.data('confirm')
         var href = $this.attr('href');
         var $table = $this.closest('table.dataTable');
-        if($table.length) var dt = new $.fn.dataTable.Api($table);
-        var deleteAction = function(){
-            if($table.length) $table.trigger('delete:start', [$this]);
+        if ($table.length) var dt = new $.fn.dataTable.Api($table);
+        var deleteAction = function () {
+            if ($table.length) $table.trigger('delete:start', [$this]);
             else $this.trigger('delete:start', [$this]);
             axios.delete(href).then(function (response) {
                 if (response.data.message) noty(response.data.message, 'success');
-                if(dt) dt.ajax.reload();
-                if($table.length) $table.trigger('delete:done', [response, $this]);
+                if (dt) dt.ajax.reload();
+                if ($table.length) $table.trigger('delete:done', [response, $this]);
                 else $this.trigger('delete:done', [response, $this]);
             })
                 .catch(function (error) {
-                    if($table.length) $table.trigger('delete:fail', [error, $this]);
+                    if ($table.length) $table.trigger('delete:fail', [error, $this]);
                     else $this.trigger('delete:fail', [error, $this]);
                 });
         }
