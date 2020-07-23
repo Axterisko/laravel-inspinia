@@ -28,7 +28,7 @@ class PasswordNotExpired
 
             if ($request->ajax())
                 return response()->json([
-                    'message' => trans('inspinia::auth.renew.password_expired')
+                    'message' => trans('inspinia::auth.password.renew.password_expired')
                 ], 401);
 
             return redirect()->route('password.expired');
