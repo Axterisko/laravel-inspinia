@@ -464,7 +464,7 @@ window.loadSheet = function (url, options) {
     } else
         var $sheet = openSheet(options && options.size ? options.size : 0.75);
     // Optionally the request above could also be done as
-    return axios.get(url)
+    return axios.get(url, options.params ? {params: options.params} : {})
         .then(function (response) {
             $sheet.html(response.data);
             var $form = $sheet.find('form');
@@ -606,7 +606,9 @@ letdatatables_rows_selected = [];
 window.clearDatatablesSelectedRows = function (tableId) {
     if (datatables_rows_selected[tableId]) datatables_rows_selected[tableId] = [];
 }
-
+window.getDatatablesSelectedRows = function(tableId){
+    return datatables_rows_selected[tableId] ? datatables_rows_selected[tableId] : [];
+}
 jQuery(function ($) {
     $(document).on('click', '.dataTable tbody input[type="checkbox"]', function (e) {
         var table = new $.fn.dataTable.Api($(this).closest('table'));
