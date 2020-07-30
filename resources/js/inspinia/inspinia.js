@@ -657,6 +657,9 @@ jQuery(function ($) {
         if ($(this).parent().find('input[type="checkbox"]').length)
             $(this).parent().find('input[type="checkbox"]').trigger('click');
     });
+    $(document).on('click', '.dataTable tbody button, .dataTable tbody [role=button], .stop-propagation', function (e) {
+        e.stopPropagation();
+    });
     /*
         $(document).on('draw.dt', function (e, settings) {
             console.log(settings);
