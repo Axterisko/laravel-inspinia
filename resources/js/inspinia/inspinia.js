@@ -601,7 +601,7 @@ function updateDataTableSelectAllCtrl(table) {
     }
 }
 
-letdatatables_rows_selected = [];
+let datatables_rows_selected = [];
 
 window.clearDatatablesSelectedRows = function (tableId) {
     if (datatables_rows_selected[tableId]) datatables_rows_selected[tableId] = [];
