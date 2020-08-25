@@ -464,7 +464,7 @@ window.loadSheet = function (url, options) {
     } else
         var $sheet = openSheet(options && options.size ? options.size : 0.75);
     // Optionally the request above could also be done as
-    return axios.get(url, options.params ? {params: options.params} : {})
+    return axios.get(url, options && options.params ? {params: options.params} : {})
         .then(function (response) {
             $sheet.html(response.data);
             var $form = $sheet.find('form');
