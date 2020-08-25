@@ -425,7 +425,7 @@ function initAjaxForm($form) {
 
                 let datatables = $form.data('datatables') ? $form.data('datatables') : '.dataTable';
                 if ($(datatables).length) {
-                    vartable = new$.fn.dataTable.Api($(datatables));
+                    var table = new $.fn.dataTable.Api($(datatables));
                     table.ajax.reload();
                 }
 
@@ -606,7 +606,7 @@ let datatables_rows_selected = [];
 window.clearDatatablesSelectedRows = function (tableId) {
     if (datatables_rows_selected[tableId]) datatables_rows_selected[tableId] = [];
 }
-window.getDatatablesSelectedRows = function(tableId){
+window.getDatatablesSelectedRows = function (tableId) {
     return datatables_rows_selected[tableId] ? datatables_rows_selected[tableId] : [];
 }
 jQuery(function ($) {
