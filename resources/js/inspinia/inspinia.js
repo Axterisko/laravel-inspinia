@@ -665,6 +665,12 @@ jQuery(function ($) {
             console.log(settings);
         });
     */
+    $(document).on('search.dt', function (e, settings) {
+        try {
+            settings.jqXHR.abort();
+        }catch(e){}
+
+    });
     $(document).on('processing.dt', function (e, settings, processing) {
         var api = new $.fn.dataTable.Api(settings);
         if (processing)
