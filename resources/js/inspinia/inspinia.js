@@ -701,6 +701,8 @@ jQuery(function ($) {
         updateDataTableSelectAllCtrl(table);
     });
 
+    $('.dataTable').closest('.ibox-content').removeClass('sk-loading');
+
     // Handle click on "Select all" control
     $(document).on('click', '.dataTable thead input[type="checkbox"]', function (e) {
         if (this.checked) {
