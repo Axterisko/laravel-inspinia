@@ -2,7 +2,7 @@
 return [
     //md-skin | light-skin | skin-1
     //mini-navbar fixed-sidebar fixed-nav fixed-nav-basic boxed-layout
-    'skin' => 'fixed-sidebar skin-1',
+    'skin' => 'fixed-sidebar',
     //navbar-static-top | navbar-fixed-top
     'navbar-skin' => 'navbar-static-top',
     //fixed
