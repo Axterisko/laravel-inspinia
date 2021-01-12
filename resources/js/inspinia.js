@@ -99,7 +99,8 @@ window.initWidget = function(){
         radioClass: 'iradio_square-grey'
     });
     $('.js-datepicker').datepicker({
-        todayHighlight: true
+        todayHighlight: true,
+        language: 'it',
     });
     $('.js-clockpicker').clockpicker({
         autoclose: true

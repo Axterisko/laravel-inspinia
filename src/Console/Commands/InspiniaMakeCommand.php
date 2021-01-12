@@ -88,6 +88,8 @@ class InspiniaMakeCommand extends Command
      */
     public function handle()
     {
+        $laravel8 = version_compare(app()->version(), '8.0.0', '>=');
+
         $this->info('Start Inspinia scaffolding');
 
         if ($this->option('assets')) {
@@ -105,6 +107,14 @@ class InspiniaMakeCommand extends Command
                     $this->call('vendor:publish', ['--tag' => 'laravel-noty']);
                     $this->call('vendor:publish', ['--tag' => 'datatables-buttons']);
                     $this->call('vendor:publish', ['--provider' => 'Spatie\Permission\PermissionServiceProvider']);
+
+
+                    //modifico il tema di default di noty
+                    config(["laravel-noty.theme" => "bootstrap-v4"]);
+                    $content = '<?php return ' . var_export(config('laravel-noty'), true) . ';';
+                    file_put_contents(config_path('laravel-noty.php'), $content);
+
+
                 }
                 if (!$this->option('no-auth')) {
                     $this->info('Execute make:auth');
@@ -137,10 +147,21 @@ class InspiniaMakeCommand extends Command
                 $this->info('Copying models...');
 
                 foreach ($this->models as $key => $value) {
+
+                    if (is_dir(app_path('Models')))
+                        $value = "Models/{$value}";
+
                     copy(
                         __DIR__ . '/stubs/make/models/' . $key,
                         app_path($value)
                     );
+
+                    if (preg_match('/Models\//', $value)) {
+                        $content = file_get_contents(app_path($value));
+                        $content = str_replace("namespace App", "namespace App\\Models", $content);
+                        file_put_contents(app_path($value), $content);
+                    }
+
                 }
             }
 
@@ -152,7 +173,7 @@ class InspiniaMakeCommand extends Command
                 $this->xcopy(__DIR__ . '/../../../public', public_path());
                 if (!$this->option('no-seeder')) {
                     $this->info('Copying seeder...');
-                    $this->xcopy(__DIR__ . '/../../../database/seeds', database_path('seeds'));
+                    $this->xcopy(__DIR__ . '/../../../database/seeds', database_path($laravel8 ? 'seeders' : 'seeds'));
                     $this->info('Dump autoload...');
                     $this->composer->dumpAutoloads();
                 }

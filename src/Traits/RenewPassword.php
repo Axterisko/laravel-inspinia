@@ -99,7 +99,7 @@ trait RenewPassword
 
         $this->resetPassword(auth()->user(), $request->input('new_password'));
 
-        $message = trans('inspinia::auth.renew.renew_confirmed');
+        $message = trans('inspinia::auth.password.renew.renew_confirmed');
 
         if ($request->wantsJson()) {
             return new JsonResponse(['message' => $message], 200);

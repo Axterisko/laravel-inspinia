@@ -46,13 +46,12 @@ class InspiniaSeeder extends Seeder
 
         $admin = config('inspinia.admin');
 
-        if (!$user = \App\User::where('username', $admin['username'])->first()) {
-            $user = factory('App\User')->create([
+        $userModel = config('inspinia.user');
+        if (!$user = $userModel::where('username', $admin['username'])->first()) {
+            $user = $userModel::create(array_merge($admin,[
                 'name' => 'Admin',
-                'username' => $admin['username'],
-                'email' => $admin['email'],
                 'password' => bcrypt($admin['username']),
-            ]);
+            ]));
 
         }
         $user->assignRole('Administrators');

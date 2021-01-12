@@ -1,7 +1,7 @@
 /*
  *
  *   INSPINIA - Responsive Admin Theme
- *   version 2.9.3
+ *   version 2.9.4
  *
  */
 
@@ -299,6 +299,12 @@ function WinMove() {
             "oAria": {
                 "sSortAscending": ": attiva per ordinare la colonna in ordine crescente",
                 "sSortDescending": ": attiva per ordinare la colonna in ordine decrescente"
+            },
+            'buttons': {
+                'create' : 'Aggiungi',
+                'reload' : 'Aggiorna',
+                'export' : 'Esporta',
+                'print' : 'Stampa',
             }
         }
     });
@@ -379,7 +385,7 @@ function WinMove() {
 })(jQuery, jQuery.fn.dataTable);
 
 
-function initAjaxForm($form) {
+window.initAjaxForm = function($form) {
 
     if ($form.hasClass('ajax-form-init')) return $form;
 
@@ -435,7 +441,7 @@ function initAjaxForm($form) {
                 var $errContainer = $form.find('.bs-callout-errors');
                 $.each(err.response.data.errors, function (field, errors) {
                     $errContainer.find('ul').append($('<li>').text(errors));
-                    $form.find('[name="' + field + '"]').addClass('is-invalid').parents('.form-group').addClass('has-error').append($('<span>').addClass('invalid-feedback').html('<strong>' + errors[0] + '</strong>'));
+                    $form.find('[name="' + field + '"]').addClass('is-invalid').closest('.form-group').addClass('has-error').append($('<span>').addClass('invalid-feedback').html('<strong>' + errors[0] + '</strong>'));
                 });
                 $errContainer.removeClass('d-none');
             }
@@ -848,10 +854,13 @@ window.noty = function (text, type, options) {
             killer: true,
             progressBar: false,
             closeWith: ['button'],
+        });
+
+        var buttons = {
             buttons: [
                 Noty.button(options.confirmText ? options.confirmText : 'Si', 'btn btn-sm btn-primary', function () {
                     if (options.confirm && typeof options.confirm === 'function') options.confirm.call();
-                    n.close();
+                    if (!options.inputRequired || $(options.inputRequired).val()) n.close();
                 }),
 
                 Noty.button(options.cancelText ? options.cancelText : 'No', 'btn btn-sm btn-default', function () {
@@ -859,7 +868,10 @@ window.noty = function (text, type, options) {
                     n.close();
                 })
             ]
-        });
+        };
+
+        if (!options.withoutButtons)
+            options = $.extend(options, buttons);
     }
 
     options = $.extend(defaultOptions, options, {text: text, type: type});
