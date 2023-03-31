@@ -13,7 +13,7 @@
     "keywords": ["Laravel", "Inspinia"],
     "type": "package",
     "require": {
-        "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0",
+        "laravel/framework": "^6.0 || ^7.0 || ^8.0 || ^9.0"
         "laravel/ui": "^2.0 || ^3.0 || ^4.0",
         "rsmalc/laravel-noty": "^2.0",
         "mariuzzo/laravel-js-localization": "^1.0",
