@@ -26,10 +26,16 @@ class InspiniaServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
+        // Support both Laravel 7.x and earlier (seeds) and Laravel 8+ (seeders)
+        $seedersPath = is_dir(database_path('seeders'))
+            ? database_path('seeders/InspiniaSeeder.php')
+            : database_path('seeds/InspiniaSeeder.php');
+
         $this->publishes([
             __DIR__ . '/../config/inspinia.php' => config_path('inspinia.php'),
             __DIR__ . '/../resources/views' => resource_path('views/vendor/inspinia'),
             __DIR__ . '/../resources/lang' => resource_path('lang/vendor/inspinia'),
+            __DIR__ . '/../database/seeds/InspiniaSeeder.php' => $seedersPath
         ], 'laravel-inspinia');
 
         // Publishing is only necessary when using the CLI.
